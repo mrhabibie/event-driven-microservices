@@ -38,17 +38,17 @@ Replace `{RMQ_APP_PORT}` and `{RMQ_MANAGEMENT_PORT}` with your desired ports.
 1. Open [http://localhost:{RMQ_MANAGEMENT_PORT}](http://localhost:{RMQ_MANAGEMENT_PORT}) in your browser.
 2. Sign in with the default username and password: `guest`.
 3. Go to Exchanges tab:
-   - Add a new exchange with your preferred name.
+   - Add a new exchange called `notifications`.
    - Set the exchange type to `Topic`.
    - Click **Add exchange**.
 4. Go to the **Queues and Streams** tab:
    - Add a new queue with type `Quorum`.
-   - Name the queue. This name will be used for the `RABBITMQ_QUEUE` variable in your `.env` file.
+   - Fill the Name field with `orders`.
    - Click **Add queue**.
-5. In the Queues and Streams tab, click the name of the queue you just added:
+5. In the **Queues and Streams** tab, click the name of the queue you just added:
    - Scroll down to the **Bindings** section.
    - Set **From exchange** to the exchange you created.
-   - Set the **Route** key to any value of your choice.
+   - Set the **Routing key** to any value of your choice.
    - Click **Bind** to link your queue to the exchange.
 
 ## 📝 Environment Setup
