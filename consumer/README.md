@@ -1,85 +1,95 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# RabbitMQ Consumer
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This guide will help you set up a RabbitMQ Consumer using NestJS for an event-driven microservice.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Note:** If you've already completed the Producer setup, you can skip to the [Environment Setup](#-environment-setup) section.
 
-## Description
+## Getting Started
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1. NodeJS - `v20.17.0` [Installation](https://nodejs.org/en/download/package-manager)
+2. Docker - `(latest)` [Installation](https://docs.docker.com/engine/install/)
 
-## Project setup
+## Clone the Repository
+
+Choose one of the following methods to clone the repository:
+
+- HTTPS
 
 ```bash
-$ pnpm install
+git clone https://github.com/mrhabibie/event-driven-microservices
 ```
 
-## Compile and run the project
+- SSH
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+git clone git@github.com:mrhabibie/event-driven-microservices.git
 ```
 
-## Run tests
+## 🐳 Docker Setup
+
+To set up RabbitMQ with Docker, run the following command to create a RabbitMQ container:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+docker run -it --rm --name rabbitmq -p {RMQ_APP_PORT}:{RMQ_APP_PORT} -p {RMQ_MANAGEMENT_PORT}:{RMQ_MANAGEMENT_PORT} rabbitmq:4.0-management
 ```
 
-## Resources
+Replace `{RMQ_APP_PORT}` and `{RMQ_MANAGEMENT_PORT}` with your desired ports.
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🐇 RabbitMQ Configuration
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+1. Open [http://localhost:{RMQ_MANAGEMENT_PORT}](http://localhost:{RMQ_MANAGEMENT_PORT}) in your browser.
+2. Sign in with the default username and password: `guest`.
+3. Go to Exchanges tab:
+   - Add a new exchange with your preferred name.
+   - Set the exchange type to `Topic`.
+   - Click **Add exchange**.
+4. Go to the **Queues and Streams** tab:
+   - Add a new queue with type `Quorum`.
+   - Name the queue. This name will be used for the `RABBITMQ_QUEUE` variable in your `.env` file.
+   - Click **Add queue**.
+5. In the Queues and Streams tab, click the name of the queue you just added:
+   - Scroll down to the **Bindings** section.
+   - Set **From exchange** to the exchange you created.
+   - Set the **Route** key to any value of your choice.
+   - Click **Bind** to link your queue to the exchange.
 
-## Support
+## 📝 Environment Setup
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+1. Navigate to the `consumer` directory:
 
-## Stay in touch
+```bash
+cd consumer
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+2. Install the required dependencies:
 
-## License
+```bash
+npm install
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+or
+
+```bash
+pnpm install
+```
+
+3. Copy `.env.example` to `.env`
+4. Open the .env file and configure the following:
+   - Set `RABBITMQ_URL` to your RabbitMQ URL, e.g., `amqp://localhost:{RMQ_APP_PORT}`.
+   - Set `RABBITMQ_QUEUE` to the name of the queue you created, e.g., `orders`.
+
+## 🚀 Running the Application
+
+To start the application, use one of the following commands:
+
+```bash
+npm run start:dev
+```
+
+or
+
+```bash
+pnpm start:dev
+```
+
+Your RabbitMQ Consumer service should now be up and running!
