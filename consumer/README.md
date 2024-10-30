@@ -73,9 +73,7 @@ pnpm install
 ```
 
 3. Copy `.env.example` to `.env`
-4. Open the .env file and configure the following:
-   - Set `RABBITMQ_URL` to your RabbitMQ URL, e.g., `amqp://localhost:{RMQ_APP_PORT}`.
-   - Set `RABBITMQ_QUEUE` to the name of the queue you created, e.g., `orders`.
+4. Open the `.env` file and set `RABBITMQ_URL` to your RabbitMQ URL, e.g., `amqp://localhost:{RMQ_APP_PORT}`.
 
 ## 🚀 Running the Application
 
