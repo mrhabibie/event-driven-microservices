@@ -1,32 +1,38 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    ClientsModule.registerAsync([
-      {
-        name: 'RABBITMQ_CLIENT',
-        imports: [ConfigModule],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBITMQ_URL')],
-            queue: configService.get<string>('RABBITMQ_QUEUE'),
-            queueOptions: {
-              durable: true,
-              arguments: { 'x-queue-type': 'quorum' },
-            },
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get<string>('RABBITMQ_URL'),
+        exchanges: [
+          {
+            name: 'notifications',
+            type: 'topic',
           },
-        }),
-      },
-    ]),
+        ],
+        enableControllerDiscovery: true,
+        channels: {
+          default: {
+            prefetchCount: 1,
+            default: true,
+          },
+        },
+        connectionInitOptions: {
+          wait: true,
+          timeout: 20000,
+        },
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
