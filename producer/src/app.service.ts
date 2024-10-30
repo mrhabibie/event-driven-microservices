@@ -1,7 +1,6 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { CsvService } from './csv/csv.service';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppService implements OnModuleInit {
@@ -14,7 +13,6 @@ export class AppService implements OnModuleInit {
   constructor(
     @Inject('RABBITMQ_CLIENT') private readonly client: ClientProxy,
     private readonly csvService: CsvService,
-    private readonly configService: ConfigService,
   ) {}
 
   async onModuleInit() {
@@ -33,10 +31,7 @@ export class AppService implements OnModuleInit {
          * consider adding a limit to prevent errors if the data runs out.
          */
         if (index < orders.length) {
-          this.client.emit(
-            this.configService.get<string>('RABBITMQ_QUEUE'),
-            orders[index],
-          );
+          this.client.emit('orders', orders[index]);
           this.logger.debug(`Data sent: ${JSON.stringify(orders[index])}`);
           index++;
         } else {

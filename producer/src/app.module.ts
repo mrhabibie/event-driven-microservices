@@ -19,7 +19,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
           transport: Transport.RMQ,
           options: {
             urls: [configService.get<string>('RABBITMQ_URL')],
-            queue: configService.get<string>('RABBITMQ_QUEUE'),
+            queue: 'orders',
             queueOptions: {
               durable: true,
               arguments: { 'x-queue-type': 'quorum' },
