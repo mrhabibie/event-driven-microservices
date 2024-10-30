@@ -4,6 +4,10 @@ import * as fs from 'fs';
 import * as csv from 'csv-parser';
 import { OrderDto } from 'src/dto/order.dto';
 
+/**
+ * Separate the CSV reading logic into its own service.
+ * This improves modularity and makes the code easier to test.
+ */
 @Injectable()
 export class CsvService {
   private readonly logger = new Logger(CsvService.name);
