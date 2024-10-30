@@ -2,7 +2,7 @@
 
 This guide will help you set up a RabbitMQ Consumer using NestJS for an event-driven microservice.
 
-**Note:** If you've already completed the Producer setup, you can skip to the [Environment Setup](#-environment-setup) section.
+> **Note:** If you've already completed the Producer setup, you can skip to the [Environment Setup](#-environment-setup) section.
 
 ## Getting Started
 
