@@ -37,7 +37,7 @@ Replace `{RMQ_APP_PORT}` and `{RMQ_MANAGEMENT_PORT}` with your desired ports.
 
 1. Open [http://localhost:{RMQ_MANAGEMENT_PORT}](http://localhost:{RMQ_MANAGEMENT_PORT}) in your browser.
 2. Sign in with the default username and password: `guest`.
-3. Go to Exchanges tab:
+3. Go to **Exchanges** tab:
    - Add a new exchange called `notifications`.
    - Set the exchange type to `Topic`.
    - Click **Add exchange**.
